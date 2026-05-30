@@ -1,0 +1,49 @@
+# Exclude ML course project (separate repo)
+ml/
+ml.zip
+
+# Exclude LaTeX report folder
+template/
+
+# Exclude slide folder
+slide/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyo
+*.egg-info/
+.eggs/
+dist/
+build/
+
+# Virtual environments
+.env
+.venv
+env/
+venv/
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb
+
+# Data files (large)
+data/raw/*.csv
+data/processed/
+
+# Model artifacts (large binaries)
+models/*.pkl
+models/*.joblib
+models/*.h5
+
+# Logs
+logs/*.log
+logs/*.txt
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/

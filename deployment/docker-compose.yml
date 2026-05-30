@@ -1,0 +1,40 @@
+services:
+  # ── FastAPI Backend ──────────────────────────────────────────
+  api:
+    build:
+      context: ..
+      dockerfile: deployment/Dockerfile
+    ports:
+      - "${API_PORT:-8000}:8000"
+      - "8787:8787"     # Dask dashboard
+    volumes:
+      - ../data:/app/data
+      - ../models:/app/models
+      - ../reports:/app/reports
+      - ../logs:/app/logs
+    environment:
+      - DASK_N_WORKERS=${DASK_N_WORKERS:-4}
+      - DASK_MEMORY_LIMIT=${DASK_MEMORY_LIMIT:-3GB}
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ── Streamlit Dashboard ──────────────────────────────────────
+  dashboard:
+    build:
+      context: ..
+      dockerfile: deployment/Dockerfile.dashboard
+    ports:
+      - "${DASHBOARD_PORT:-8501}:8501"
+    volumes:
+      - ../reports:/app/reports
+      - ../models:/app/models
+    environment:
+      - API_URL=http://api:8000
+    depends_on:
+      api:
+        condition: service_healthy
+    restart: unless-stopped

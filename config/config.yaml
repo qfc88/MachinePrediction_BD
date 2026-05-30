@@ -1,0 +1,63 @@
+project:
+  name: "predictive-maintenance"
+  version: "1.0.0"
+
+paths:
+  raw_data: "data/raw/machine failure.csv"
+  processed_data: "data/processed"
+  models: "models"
+  reports: "reports"
+  logs: "logs"
+
+dask:
+  n_workers: 4
+  threads_per_worker: 2
+  memory_limit: "3GB"
+  dashboard_port: 8787
+
+data:
+  target_column: "Machine failure"
+  id_columns: ["UDI", "Product ID"]
+  categorical_columns: ["Type"]
+  failure_type_columns: ["TWF", "HDF", "PWF", "OSF", "RNF"]
+  sensor_columns:
+    - "Air temperature [K]"
+    - "Process temperature [K]"
+    - "Rotational speed [rpm]"
+    - "Torque [Nm]"
+    - "Tool wear [min]"
+  test_size: 0.2
+  random_state: 42
+
+feature_engineering:
+  rolling_windows: [3, 5, 10]
+  interaction_features: true
+  polynomial_degree: 2
+
+training:
+  algorithms:
+    - logistic_regression
+    - decision_tree
+    - random_forest
+    - gradient_boosting
+    - xgboost
+    - lightgbm
+  cv_folds: 5
+  scoring: "f1"
+  handle_imbalance: "smote"
+
+monitoring:
+  failure_threshold: 0.7
+  alert_cooldown_seconds: 60
+  batch_size: 50
+  stream_interval: 2
+
+api:
+  host: "0.0.0.0"
+  port: 8000
+
+dashboard:
+  host: "0.0.0.0"
+  port: 8501
+  api_url: "http://localhost:8000"
+  refresh_interval: 3
