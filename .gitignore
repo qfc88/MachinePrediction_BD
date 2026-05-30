@@ -1,13 +1,3 @@
-# Exclude ML course project (separate repo)
-ml/
-ml.zip
-
-# Exclude LaTeX report folder
-template/
-
-# Exclude slide folder
-slide/
-
 # Python cache
 __pycache__/
 *.py[cod]
